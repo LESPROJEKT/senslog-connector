@@ -1,0 +1,75 @@
+settings:
+
+  - iconeu:
+      name: "[RT] Open Meteo Icon EU"
+      provider: "cz.senslog.connector.fetch.openmeteo.ConnectorFetchOpenMeteoProvider"
+
+      baseUrl: "https://previous-runs-api.open-meteo.com/v1/forecast"
+
+      timeZone: "UTC"
+      startDate: "now"
+      period: -1 # -1 = disabled
+
+
+      allowedStation:
+        url: "http://localhost:8080/senslog/rest/forecast/openmeteo/plan"
+        params:
+          latitude: ${latitude}
+          longitude: ${longitude}
+          models: icon_eu
+          forecast_days: 3
+          hourly: [temperature_2m,temperature_2m_previous_day2,relative_humidity_2m,relative_humidity_2m_previous_day2,
+                   dew_point_2m,dew_point_2m_previous_day1,dew_point_2m_previous_day2,apparent_temperature,apparent_temperature_previous_day1,apparent_temperature_previous_day2,
+                   precipitation,precipitation_previous_day1,precipitation_previous_day2,rain,rain_previous_day1,rain_previous_day2,showers,snowfall,weather_code,surface_pressure,cloud_cover,
+                   wind_direction_10m,wind_speed_10m,showers_previous_day1,snowfall_previous_day1,
+                   weather_code_previous_day1,surface_pressure_previous_day1,cloud_cover_previous_day1,wind_speed_10m_previous_day1,wind_direction_10m_previous_day1,
+                   showers_previous_day2,snowfall_previous_day2,weather_code_previous_day2,surface_pressure_previous_day2,cloud_cover_previous_day2,wind_speed_10m_previous_day2,
+                   wind_direction_10m_previous_day2,relative_humidity_2m_previous_day1,temperature_2m_previous_day1]
+
+  - iconeu_past:
+      name: "[past] Open Meteo Icon EU"
+      provider: "cz.senslog.connector.fetch.openmeteo.ConnectorFetchOpenMeteoProvider"
+
+      baseUrl: "https://previous-runs-api.open-meteo.com/v1/forecast"
+
+      timeZone: "UTC"
+      startDate: "2024-12-01" # Dec. 1 2024
+      endDate: "2025-12-14" # Dec. 14
+      period: 24 # 1 day
+
+      allowedStation:
+        url: "http://localhost:8080/senslog/rest/forecast/openmeteo/plan"
+        minId: 4
+        params:
+          latitude: ${latitude}
+          longitude: ${longitude}
+          models: icon_eu
+          start_date: ${currentDate}
+          end_date: ${currentDate}
+          hourly: [ temperature_2m,temperature_2m_previous_day2,relative_humidity_2m,relative_humidity_2m_previous_day2,
+                    dew_point_2m,dew_point_2m_previous_day1,dew_point_2m_previous_day2,apparent_temperature,apparent_temperature_previous_day1,apparent_temperature_previous_day2,
+                    precipitation,precipitation_previous_day1,precipitation_previous_day2,rain,rain_previous_day1,rain_previous_day2,showers,snowfall,weather_code,surface_pressure,cloud_cover,
+                    wind_direction_10m,wind_speed_10m,showers_previous_day1,snowfall_previous_day1,
+                    weather_code_previous_day1,surface_pressure_previous_day1,cloud_cover_previous_day1,wind_speed_10m_previous_day1,wind_direction_10m_previous_day1,
+                    showers_previous_day2,snowfall_previous_day2,weather_code_previous_day2,surface_pressure_previous_day2,cloud_cover_previous_day2,wind_speed_10m_previous_day2,
+                    wind_direction_10m_previous_day2,relative_humidity_2m_previous_day1,temperature_2m_previous_day1 ]
+  - Senslog:
+      name: "Senslog Pass Trough"
+      provider: "cz.senslog.connector.push.senslog.ConnectorPushSensLogProvider"
+
+      baseUrl: "http://localhost:8080/senslog/rest/forecast/openmeteo"
+
+connectors:
+  - IconEUSenslog_RT:
+      fetcher: "iconeu"
+      pusher: "Senslog"
+      period: 10_800          # 3h
+      startAt: "03:00:00" # hh:mm:ss  # non-mandatory attribute
+#      initDelay: 10        # non-mandatory attribute
+
+#  - IconEUSenslog_PAST:
+#      fetcher: "iconeu_past"
+#      pusher: "Senslog"
+#      period: 10           # seconds
+##      startAt: "22:10:00" # hh:mm:ss  # non-mandatory attribute
+#      initDelay: 10        # non-mandatory attribute

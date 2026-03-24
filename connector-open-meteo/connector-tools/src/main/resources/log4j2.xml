@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="INFO">
+
+    <Properties>
+        <Property name="logPath">./</Property>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n" />
+        </Console>
+
+        <RollingFile name="filebeat"
+                     fileName="${sys:logPath}/app.log"
+                     filePattern="${sys:logPath}/app.%i.log.gz"
+        >
+            <PatternLayout alwaysWriteExceptions="false"
+                    pattern='{"app.date":"%d{ISO8601}","app.thread":"%t","app.level":"%level","app.logger":"%logger:%L", "app.exception":"%enc{%ex}{JSON}", "app.message":"%msg"}%n'
+            />
+            <Policies>
+<!--                <TimeBasedTriggeringPolicy interval="1"/> &lt;!&ndash; Number of days for a log file &ndash;&gt;-->
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <Logger name="cz.senslog" level="info" />
+        <Root level="info">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="filebeat" />
+        </Root>
+    </Loggers>
+</Configuration>

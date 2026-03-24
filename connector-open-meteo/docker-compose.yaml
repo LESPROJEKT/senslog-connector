@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  era5land2senslog:
+    container_name: era5land2senslog
+    image: senslog/connector-period-era5land
+    build:
+      dockerfile: docker/Dockerfile
+      target: production
+      context: .
+      args:
+        MAVEN_PROFILE: Era5LandSenslog
+        CONFIG_FILE: ./config/openMeteoEra5LandToSenslog.yaml
+
+  iconeu2senslog:
+    container_name: iconeu2senslog
+    image: senslog/connector-period-iconeu
+    build:
+      dockerfile: docker/Dockerfile
+      target: production
+      context: .
+      args:
+        MAVEN_PROFILE: IconEUSenslog
+        CONFIG_FILE: ./config/openMeteoIconEUToSenslog.yaml

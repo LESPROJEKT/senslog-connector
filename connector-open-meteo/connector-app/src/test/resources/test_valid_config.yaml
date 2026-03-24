@@ -1,0 +1,26 @@
+feMainDomain: &fetcherApiDomain
+  domain: "<fetcher_api_domain>"
+
+puMainDomain: &pusherApiDomain
+  domain: "<pusher_api_domain>"
+
+settings:
+  - FetchProviderId:
+      name: "<name>"
+      provider: "cz.senslog.connector.app.config.TestFetchProviderClass"
+      host:
+        <<: *fetcherApiDomain
+        path: "<path>"
+
+  - PushProviderId:
+      name: "<name>"
+      provider: "cz.senslog.connector.app.config.TestPushProviderClass"
+      host:
+        <<: *pusherApiDomain
+        path: "<path>"
+
+connectors:
+  - ConnectorName:
+      fetcher: "FetchProviderId"
+      pusher: "PushProviderId"
+      period: 1
